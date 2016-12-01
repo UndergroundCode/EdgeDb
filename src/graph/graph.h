@@ -6,6 +6,12 @@
 #define GRAPH_H_
 
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <stdbool.h>
+
 #include "../node/node.h"
 #include "../mem/allocate.h"
 

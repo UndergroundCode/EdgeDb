@@ -24,17 +24,37 @@ Node* FindNodeById(Graph* graph, int id){
 
 void CreateDatabase(){
 	printf("Database Name: ");
-	char name[255];
+	char name[256];
 	scanf("%s", name);
 
-	char* dbName = Allocate(sizeof(char) * (strlen(name) * 3));
-	dbName[0] = '\0';
-	strcat(dbName, name);
-	strcat(dbName, ".db");
+	printf("Database Location: ");
+	char loc[256];
+	scanf("%s", loc);
 
-	printf("%s\n", dbName);
+	char dbName[256];
+	sprintf(dbName, "%s.db", name);
+	sprintf(loc, "%s/%s", loc, dbName);
 
-	FILE* file = fopen(dbName, "w");
+	char tmp[256];
+	char* p;
+	size_t len;
+
+	snprintf(tmp, sizeof(tmp), "%s", loc);
+	len = strlen(tmp);
+	if (tmp[len - 1] == '/') tmp[len - 1] = 0;
+	for (p = tmp + 1; *p; p++){
+		if (*p == '/'){
+			*p = 0;
+			mkdir(tmp, S_IRWXU);
+			*p = '/';
+		}
+	}
+	mkdir(tmp, S_IRWXU);
+
+	snprintf(tmp, sizeof(tmp), "%s/graph.db", loc);
+
+	// Create graph.db file
+	FILE* file = fopen(tmp, "w");
 	if (file == NULL) {
 		printf("Error creating database file\n");
 		exit(1);
@@ -43,5 +63,4 @@ void CreateDatabase(){
 	fprintf(file, "Name: %s", name);
 
 	fclose(file);
-	free(dbName);
 }
